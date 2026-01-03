@@ -1,9 +1,6 @@
 package be.ucll.backend.campusapi.controller;
 
-import be.ucll.backend.campusapi.error.CampusNameCannotBeChanged;
-import be.ucll.backend.campusapi.error.CampusNameDoesntExists;
-import be.ucll.backend.campusapi.error.CampusNameNeedsToBeUnique;
-import be.ucll.backend.campusapi.error.RequiredFieldNameException;
+import be.ucll.backend.campusapi.error.*;
 import be.ucll.backend.campusapi.model.Campus;
 import be.ucll.backend.campusapi.model.Room;
 import be.ucll.backend.campusapi.service.CampusService;
@@ -71,20 +68,26 @@ public class CampusController {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({CampusNameNeedsToBeUnique.class})
+    @ExceptionHandler({CampusNameNeedsToBeUniqueException.class})
     public Fieldmessage handleCampusNameNeedsToBeUniqueException() {
         return new Fieldmessage("campusName", "campus name needs to be unique");
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({CampusNameDoesntExists.class})
-    public Fieldmessage handleCampusNameDoesntExistException() {
+    @ExceptionHandler({CampusNameDoesntExistException.class})
+    public Fieldmessage handleCampusNameDoesntExist() {
         return new Fieldmessage("campus", "campus name doesn't exist");
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    @ExceptionHandler({CampusNameCannotBeChanged.class})
-    public Fieldmessage handleCampusNameCannotBeChanged() {
+    @ExceptionHandler({CampusNameCannotBeChangedException.class})
+    public Fieldmessage handleCampusNameCannotBeChangedException() {
         return new Fieldmessage("campusName", "campus name cannot be changed");
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({RoomNameNeedsToBeUniqueException.class})
+    public Fieldmessage handleRoomNameNeedsToBeUniqueException() {
+        return new Fieldmessage("name", "room name needs to be unique");
     }
 }

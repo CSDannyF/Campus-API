@@ -35,6 +35,7 @@ public class Campus {
         }
         this.rooms.add(room);
         room.setCampus(this);
+        setNumberOfRooms();
     }
 
     public String getCampusName() {

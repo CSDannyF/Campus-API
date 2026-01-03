@@ -1,5 +1,6 @@
 package be.ucll.backend.campusapi.repository;
 
+import be.ucll.backend.campusapi.error.RoomNameNeedsToBeUniqueException;
 import be.ucll.backend.campusapi.model.Room;
 import be.ucll.backend.campusapi.repository.jpa.RoomJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ public class RoomRepositoryImplementation implements RoomRepository {
 
     @Override
     public Room save(Room room) {
+        if (this.roomJpaRepository.existsByNameAndCampus_CampusName(room.getName(), room.getCampus().getCampusName())) {
+            throw new RoomNameNeedsToBeUniqueException();
+        }
         return this.roomJpaRepository.save(room);
     }
 }

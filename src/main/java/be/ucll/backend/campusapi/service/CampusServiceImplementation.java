@@ -1,13 +1,12 @@
 package be.ucll.backend.campusapi.service;
 
-import be.ucll.backend.campusapi.error.CampusNameCannotBeChanged;
-import be.ucll.backend.campusapi.error.CampusNameDoesntExists;
-import be.ucll.backend.campusapi.error.CampusNameNeedsToBeUnique;
+import be.ucll.backend.campusapi.error.CampusNameCannotBeChangedException;
+import be.ucll.backend.campusapi.error.CampusNameDoesntExistException;
+import be.ucll.backend.campusapi.error.CampusNameNeedsToBeUniqueException;
 import be.ucll.backend.campusapi.error.RequiredFieldNameException;
 import be.ucll.backend.campusapi.model.Campus;
 import be.ucll.backend.campusapi.model.Room;
 import be.ucll.backend.campusapi.repository.CampusRepository;
-import be.ucll.backend.campusapi.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,14 +32,14 @@ public class CampusServiceImplementation implements CampusService {
     @Override
     public Campus getCampusById(String campusId) {
         return this.campusRepository.getById(campusId).orElseThrow(
-                CampusNameDoesntExists::new
+                CampusNameDoesntExistException::new
         );
     }
 
     @Override
     public Campus addCampuses(Campus campus) {
         if (allCampuses().stream().anyMatch(campus1 -> campus1.getCampusName().equals(campus.getCampusName()))) {
-            throw new CampusNameNeedsToBeUnique();
+            throw new CampusNameNeedsToBeUniqueException();
         }
 
         if (campus.getCampusName().equals("")
@@ -56,7 +55,7 @@ public class CampusServiceImplementation implements CampusService {
         Campus campusToUpdate = getCampusById(campusId);
 
         if(!campusId.equals(campus.getCampusName())) {
-            throw new CampusNameCannotBeChanged();
+            throw new CampusNameCannotBeChangedException();
         }
 
         campusToUpdate.updateCampus(campus);

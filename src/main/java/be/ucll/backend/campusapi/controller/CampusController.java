@@ -5,6 +5,7 @@ import be.ucll.backend.campusapi.error.CampusNameDoesntExists;
 import be.ucll.backend.campusapi.error.CampusNameNeedsToBeUnique;
 import be.ucll.backend.campusapi.error.RequiredFieldNameException;
 import be.ucll.backend.campusapi.model.Campus;
+import be.ucll.backend.campusapi.model.Room;
 import be.ucll.backend.campusapi.service.CampusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,6 +52,16 @@ public class CampusController {
     @DeleteMapping("/{campusId}")
     public void deleteCampus(@PathVariable String campusId) {
         this.campusService.deleteCampus(campusId);
+    }
+
+    @GetMapping("/{campusId}/rooms")
+    public List<Room> getAllCampusRooms(@PathVariable String campusId) {
+        return this.campusService.getAllCampusRooms(campusId);
+    }
+
+    @PostMapping("/{campusId}/rooms")
+    public Room addRoomToCampus(@PathVariable String campusId, @RequestBody Room room) {
+        return this.campusService.addRoomToCampus(campusId, room);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

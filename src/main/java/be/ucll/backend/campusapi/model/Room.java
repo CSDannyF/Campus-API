@@ -4,12 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
-public class Classroom {
+public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long classroomId;
+    private long roomId;
 
-    @Column
+    @Column(unique = true)
     private String name;
 
     @Column
@@ -88,11 +88,11 @@ public class Classroom {
         this.name = name;
     }
 
-    public long getClassroomId() {
-        return classroomId;
+    public long getRoomId() {
+        return roomId;
     }
 
-    public void setClassroomId(long id) {
-        this.classroomId = id;
+    public void setRoomId(long id) {
+        this.roomId = id;
     }
 }

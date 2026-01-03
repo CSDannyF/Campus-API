@@ -1,5 +1,6 @@
 package be.ucll.backend.campusapi.model;
 
+import be.ucll.backend.campusapi.error.RoomModelException;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -19,13 +20,21 @@ public class Campus {
     @Column
     private int numberOfRooms;
 
-    @OneToMany(mappedBy = "campus")
-    private List<Classroom> classrooms = new ArrayList<>();
+    @OneToMany(mappedBy = "campus", cascade = CascadeType.ALL)
+    private List<Room> rooms = new ArrayList<>();
 
     public void updateCampus(Campus campus) {
         this.campusName = campus.campusName;
         this.address = campus.address;
         this.numberOfParkingSpaces = campus.numberOfParkingSpaces;
+    }
+
+    public void addRoom(Room room) {
+        if (room == null) {
+            throw new RoomModelException("Room cannot be null");
+        }
+        this.rooms.add(room);
+        room.setCampus(this);
     }
 
     public String getCampusName() {
@@ -57,14 +66,14 @@ public class Campus {
     }
 
     public void setNumberOfRooms() {
-        this.numberOfRooms = this.classrooms.size();
+        this.numberOfRooms = this.rooms.size();
     }
 
-    public List<Classroom> getClassrooms() {
-        return classrooms;
+    public List<Room> getRooms() {
+        return rooms;
     }
 
-    public void setClassrooms(List<Classroom> classrooms) {
-        this.classrooms = classrooms;
+    public void setRooms(List<Room> rooms) {
+        this.rooms = rooms;
     }
 }

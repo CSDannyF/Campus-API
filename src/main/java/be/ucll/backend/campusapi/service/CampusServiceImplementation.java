@@ -5,7 +5,9 @@ import be.ucll.backend.campusapi.error.CampusNameDoesntExists;
 import be.ucll.backend.campusapi.error.CampusNameNeedsToBeUnique;
 import be.ucll.backend.campusapi.error.RequiredFieldNameException;
 import be.ucll.backend.campusapi.model.Campus;
+import be.ucll.backend.campusapi.model.Room;
 import be.ucll.backend.campusapi.repository.CampusRepository;
+import be.ucll.backend.campusapi.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +17,12 @@ import java.util.List;
 public class CampusServiceImplementation implements CampusService {
 
     private CampusRepository campusRepository;
+    private RoomService roomService;
 
     @Autowired
-    public CampusServiceImplementation(CampusRepository campusRepository) {
+    public CampusServiceImplementation(CampusRepository campusRepository, RoomService roomService) {
         this.campusRepository = campusRepository;
+        this.roomService = roomService;
     }
 
     @Override
@@ -68,5 +72,21 @@ public class CampusServiceImplementation implements CampusService {
     public void deleteCampus(String campusId) {
         getCampusById(campusId);
         this.campusRepository.deleteCampus(campusId);
+    }
+
+    @Override
+    public List<Room> getAllCampusRooms(String campusId) {
+         Campus campus = getCampusById(campusId);
+         return campus.getRooms();
+    }
+
+    @Override
+    public Room addRoomToCampus(String campusId, Room room) {
+        Campus campus = getCampusById(campusId);
+
+        campus.addRoom(room);
+        //Campus updatedCampus = this.campusRepository.addCampus(campus);
+        return this.roomService.addRoom(room);
+
     }
 }

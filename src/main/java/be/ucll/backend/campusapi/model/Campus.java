@@ -1,7 +1,6 @@
 package be.ucll.backend.campusapi.model;
 
 import be.ucll.backend.campusapi.error.RoomModelException;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
@@ -19,6 +18,10 @@ public class Campus {
     @Column
     private int numberOfParkingSpaces;
 
+    /*
+    https://manishkrb.medium.com/jsonproperty-access-jsonproperty-access-read-only-8c5487af6100
+    JsonProperty.acces.READ_ONLY zorgt ervoor dat dit veld enkel leesbaar is en komt zo ook niet in de swagger ui
+     */
     @Column
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private int numberOfRooms;

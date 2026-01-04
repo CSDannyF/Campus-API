@@ -57,7 +57,7 @@ public class CampusController {
     @GetMapping("/{campusId}/rooms")
     public List<Room> getCampusRooms(
             @PathVariable String campusId,
-            @RequestParam(required = false) Integer minNumberOfSeats) {
+            @RequestParam(required = false, defaultValue = "0") int minNumberOfSeats) {
         return this.campusService.getCampusRooms(campusId, minNumberOfSeats);
     }
 

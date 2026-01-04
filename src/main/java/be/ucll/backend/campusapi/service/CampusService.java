@@ -14,6 +14,6 @@ public interface CampusService {
     Campus updateCampus(String campusId, Campus campus);
     void deleteAll();
     void deleteCampus(String campusId);
-    List<Room> getAllCampusRooms(String campusId);
+    List<Room> getCampusRooms(String campusId, int minNumberOfSeats);
     Room addRoomToCampus(String campusId, Room room);
 }

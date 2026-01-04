@@ -1,6 +1,7 @@
 package be.ucll.backend.campusapi.repository;
 
 import be.ucll.backend.campusapi.model.Campus;
+import be.ucll.backend.campusapi.model.Room;
 import be.ucll.backend.campusapi.repository.jpa.CampusJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

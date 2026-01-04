@@ -4,6 +4,7 @@ import be.ucll.backend.campusapi.error.*;
 import be.ucll.backend.campusapi.model.Campus;
 import be.ucll.backend.campusapi.model.Room;
 import be.ucll.backend.campusapi.service.CampusService;
+import be.ucll.backend.campusapi.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +16,12 @@ import java.util.List;
 public class CampusController {
 
     private CampusService campusService;
+    private RoomService roomService;
 
     @Autowired
-    public CampusController(CampusService campusService) {
+    public CampusController(CampusService campusService, RoomService roomService) {
         this.campusService = campusService;
+        this.roomService = roomService;
     }
 
     @GetMapping
@@ -52,8 +55,15 @@ public class CampusController {
     }
 
     @GetMapping("/{campusId}/rooms")
-    public List<Room> getAllCampusRooms(@PathVariable String campusId) {
-        return this.campusService.getAllCampusRooms(campusId);
+    public List<Room> getCampusRooms(
+            @PathVariable String campusId,
+            @RequestParam(required = false) Integer minNumberOfSeats) {
+        return this.campusService.getCampusRooms(campusId, minNumberOfSeats);
+    }
+
+    @GetMapping("/{campusId}/rooms/{roomName}")
+    public Room getRoomByName(@PathVariable String campusId, @PathVariable String roomName) {
+        return this.roomService.getRoom(campusId, roomName);
     }
 
     @PostMapping("/{campusId}/rooms")
@@ -89,5 +99,11 @@ public class CampusController {
     @ExceptionHandler({RoomNameNeedsToBeUniqueException.class})
     public Fieldmessage handleRoomNameNeedsToBeUniqueException() {
         return new Fieldmessage("name", "room name needs to be unique");
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({RoomNameDoesntExistException.class})
+    public Fieldmessage handeRoomNameDoesntExistException() {
+        return new Fieldmessage("name", "room name doesn't exist in this campus");
     }
 }

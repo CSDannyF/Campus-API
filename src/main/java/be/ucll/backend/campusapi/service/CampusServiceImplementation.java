@@ -74,9 +74,9 @@ public class CampusServiceImplementation implements CampusService {
     }
 
     @Override
-    public List<Room> getAllCampusRooms(String campusId) {
+    public List<Room> getCampusRooms(String campusId, int minNumberOfSeats) {
          Campus campus = getCampusById(campusId);
-         return campus.getRooms();
+         return this.roomService.searchRooms(campus, minNumberOfSeats);
     }
 
     @Override
@@ -86,6 +86,5 @@ public class CampusServiceImplementation implements CampusService {
         campus.addRoom(room);
         //Campus updatedCampus = this.campusRepository.addCampus(campus);
         return this.roomService.addRoom(room);
-
     }
 }

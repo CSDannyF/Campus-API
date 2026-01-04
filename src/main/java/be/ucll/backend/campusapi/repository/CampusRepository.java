@@ -1,6 +1,7 @@
 package be.ucll.backend.campusapi.repository;
 
 import be.ucll.backend.campusapi.model.Campus;
+import be.ucll.backend.campusapi.model.Room;
 
 import java.util.List;
 import java.util.Optional;

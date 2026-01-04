@@ -1,6 +1,8 @@
 package be.ucll.backend.campusapi.model;
 
 import be.ucll.backend.campusapi.error.RoomModelException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -18,9 +20,11 @@ public class Campus {
     private int numberOfParkingSpaces;
 
     @Column
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private int numberOfRooms;
 
     @OneToMany(mappedBy = "campus", cascade = CascadeType.ALL)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private List<Room> rooms = new ArrayList<>();
 
     public void updateCampus(Campus campus) {

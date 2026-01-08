@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class Room {
     @Id
@@ -33,6 +35,9 @@ public class Room {
     @JsonIgnore
     @JoinColumn(name = "campusName")
     private Campus campus;
+
+    @ManyToMany(mappedBy = "rooms")
+    private List<Reservation> reservations;
 
     public Campus getCampus() {
         return campus;

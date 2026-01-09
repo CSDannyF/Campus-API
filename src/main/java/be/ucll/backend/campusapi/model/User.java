@@ -1,5 +1,6 @@
 package be.ucll.backend.campusapi.model;
 
+import be.ucll.backend.campusapi.error.ReservationModelException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
@@ -23,8 +24,17 @@ public class User {
     private LocalDate dateOfBirth;
 
     @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Reservation> reservations = new ArrayList<>();
+
+    public void addReservation(Reservation reservation) {
+        if (reservation == null) {
+            throw new ReservationModelException("Reservation cannot be null");
+        }
+        this.reservations.add(reservation);
+        reservation.setUser(this);
+    }
 
     public long getUserId() {
         return userId;

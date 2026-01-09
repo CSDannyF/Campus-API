@@ -85,7 +85,7 @@ public class CampusController {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({CampusNameDoesntExistException.class})
-    public Fieldmessage handleCampusNameDoesntExist() {
+    public Fieldmessage handleCampusNameDoesntExistException() {
         return new Fieldmessage("campus", "campus name doesn't exist");
     }
 
@@ -102,7 +102,7 @@ public class CampusController {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({RoomNameDoesntExistException.class})
+    @ExceptionHandler({RoomDoesntExistException.class})
     public Fieldmessage handeRoomNameDoesntExistException() {
         return new Fieldmessage("name", "room name doesn't exist in this campus");
     }

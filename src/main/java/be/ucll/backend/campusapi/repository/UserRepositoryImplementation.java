@@ -18,7 +18,7 @@ public class UserRepositoryImplementation implements UserRepository {
     }
 
     @Override
-    public Optional<User> getAppUserById(long id) {
+    public Optional<User> getUserById(long id) {
         return this.userJpaRepository.findById(id);
     }
 

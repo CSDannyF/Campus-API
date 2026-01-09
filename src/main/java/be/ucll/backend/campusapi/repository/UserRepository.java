@@ -7,6 +7,6 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository {
-    Optional<User> getAppUserById(long id);
+    Optional<User> getUserById(long id);
     User addUser(User user);
 }

@@ -12,4 +12,6 @@ public interface RoomRepository {
     List<Room> getRoomsWithMinNumberOfSeats(String campusId, int minNumberOfSeats);
     Optional<Room> getRoomByName(String campusId, String roomName);
     List<Room> searchRooms(String campusId, int minNumberOfSeats);
+
+    Optional<Room> getRoomById(long roomId);
 }

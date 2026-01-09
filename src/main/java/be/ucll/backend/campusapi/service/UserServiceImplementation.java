@@ -6,19 +6,23 @@ import be.ucll.backend.campusapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserServiceImplementation implements UserService {
 
     private UserRepository userRepository;
+    private ReservationService reservationService;
 
     @Autowired
-    public UserServiceImplementation(UserRepository userRepository) {
+    public UserServiceImplementation(UserRepository userRepository, ReservationService reservationService) {
         this.userRepository = userRepository;
+        this.reservationService = reservationService;
     }
 
     @Override
     public User getUserById(long id) {
-        return this.userRepository.getAppUserById(id).orElseThrow(
+        return this.userRepository.getUserById(id).orElseThrow(
                 UserDoesntExistException::new
         );
     }

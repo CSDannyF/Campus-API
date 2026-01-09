@@ -1,5 +1,6 @@
 package be.ucll.backend.campusapi.model;
 
+import be.ucll.backend.campusapi.error.RoomModelException;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
@@ -10,6 +11,7 @@ import java.util.List;
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private long reservationId;
 
     @Column(name = "START_TIME")
@@ -21,11 +23,13 @@ public class Reservation {
     @Column
     private String comment;
 
+    @Transient
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private int maxNumberOfPersons;
 
     @ManyToOne
     @JoinColumn(name = "user")
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private User user;
 
     @ManyToMany
@@ -34,7 +38,17 @@ public class Reservation {
             joinColumns = @JoinColumn(name = "reservation_id"),
             inverseJoinColumns = @JoinColumn(name = "room_id")
     )
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private List<Room> rooms;
+
+    public void addRoomToReservation(Room room) {
+        if (room == null) {
+            throw new RoomModelException("Room cannot be null");
+        }
+        this.rooms.add(room);
+        room.setReservationToRoom(this);
+        setMaxNumberOfPersons(room.getCapacity());
+    }
 
     public long getReservationId() {
         return reservationId;

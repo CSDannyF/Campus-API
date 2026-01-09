@@ -41,4 +41,9 @@ public class RoomRepositoryImplementation implements RoomRepository {
     public List<Room> searchRooms(String campusId, int minNumberOfSeats) {
         return this.roomJpaRepository.findRoomByCapacityGreaterThanEqualAndCampus_CampusName(minNumberOfSeats, campusId);
     }
+
+    @Override
+    public Optional<Room> getRoomById(long roomId) {
+        return this.roomJpaRepository.findById(roomId);
+    }
 }

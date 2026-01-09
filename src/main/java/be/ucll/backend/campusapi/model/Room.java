@@ -102,4 +102,9 @@ public class Room {
     public void setRoomId(long id) {
         this.roomId = id;
     }
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    public void setReservationToRoom(Reservation reservation) {
+        this.reservations.add(reservation);
+    }
 }

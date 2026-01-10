@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -38,7 +39,7 @@ public class Room {
 
     @ManyToMany(mappedBy = "rooms")
     @JsonIgnore
-    private List<Reservation> reservations;
+    private List<Reservation> reservations = new ArrayList<>();
 
     public Campus getCampus() {
         return campus;

@@ -118,7 +118,7 @@ public class ReservationServiceImplementation implements ReservationService {
     /// First check if the reservation had overlap with another reservation, if that's the case. Check if the room to book is already in de reservation.
     /// if true then the room reservation overlaps
     private boolean checkIfRoomHasReservationOverlap(List<Reservation> reservations, Reservation reservationToMake, Room roomToBook) {
-        return this.reservationRepository.getAllReservations().stream()
+        return reservations.stream()
                 .filter(
                         reservation1 -> reservation1.getStartTime().isBefore(reservationToMake.getEndTime())
                                 && reservation1.getEndTime().isAfter(reservationToMake.getStartTime()))

@@ -27,7 +27,7 @@ public class Room {
     private String firstName;
 
     @Column
-    private String LastName;
+    private String lastName;
 
     @Column
     private String floor;
@@ -58,11 +58,11 @@ public class Room {
     }
 
     public String getLastName() {
-        return LastName;
+        return lastName;
     }
 
     public void setLastName(String lastName) {
-        LastName = lastName;
+        this.lastName = lastName;
     }
 
     public String getFirstName() {

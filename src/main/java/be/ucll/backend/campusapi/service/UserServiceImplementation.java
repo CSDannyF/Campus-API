@@ -1,6 +1,7 @@
 package be.ucll.backend.campusapi.service;
 
-import be.ucll.backend.campusapi.error.UserDoesntExistException;
+import be.ucll.backend.campusapi.error.RequiredFieldNameException;
+import be.ucll.backend.campusapi.error.UserException;
 import be.ucll.backend.campusapi.model.User;
 import be.ucll.backend.campusapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,23 +15,25 @@ import java.util.stream.Collectors;
 public class UserServiceImplementation implements UserService {
 
     private UserRepository userRepository;
-    private ReservationService reservationService;
 
     @Autowired
-    public UserServiceImplementation(UserRepository userRepository, ReservationService reservationService) {
+    public UserServiceImplementation(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.reservationService = reservationService;
     }
 
     @Override
     public User getUserById(long id) {
         return this.userRepository.getUserById(id).orElseThrow(
-                UserDoesntExistException::new
+                () -> new UserException("User does not exist")
         );
     }
 
     @Override
     public User addUser(User user) {
+        if (user.getName().isEmpty()
+                || user.getDateOfBirth() == null) {
+            throw new RequiredFieldNameException("Provide all fields");
+        }
         return this.userRepository.addUser(user);
     }
 

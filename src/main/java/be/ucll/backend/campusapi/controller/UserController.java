@@ -1,14 +1,10 @@
 package be.ucll.backend.campusapi.controller;
 
-import be.ucll.backend.campusapi.error.ReservationDoesntExistException;
-import be.ucll.backend.campusapi.error.ReservationTimeException;
-import be.ucll.backend.campusapi.error.RoomDoesntExistException;
-import be.ucll.backend.campusapi.error.UserDoesntExistException;
+import be.ucll.backend.campusapi.error.*;
 import be.ucll.backend.campusapi.model.Reservation;
 import be.ucll.backend.campusapi.model.User;
 import be.ucll.backend.campusapi.service.ReservationService;
 import be.ucll.backend.campusapi.service.UserService;
-import jakarta.xml.bind.annotation.XmlRootElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -72,26 +68,32 @@ public class UserController {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({UserDoesntExistException.class})
-    public Fieldmessage handeUserDoesntExistException() {
-        return new Fieldmessage("user", "user doesn't exist");
+    @ExceptionHandler({RequiredFieldNameException.class})
+    public Fieldmessage handleRequiredFieldException(RequiredFieldNameException e) {
+        return new Fieldmessage("", e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({ReservationDoesntExistException.class})
-    public Fieldmessage handleReservationDoesntExistException() {
-        return new Fieldmessage("reservation", "reservation doesn't exist");
+    @ExceptionHandler({UserException.class})
+    public Fieldmessage handeUserDoesntExistException(UserException e) {
+        return new Fieldmessage("user", e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({RoomDoesntExistException.class})
-    public Fieldmessage handeRoomNameDoesntExistException() {
-        return new Fieldmessage("name", "room doesn't exist");
+    @ExceptionHandler({ReservationException.class})
+    public Fieldmessage handleReservationDoesntExistException(ReservationException e) {
+        return new Fieldmessage("reservation", e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({RoomException.class})
+    public Fieldmessage handeRoomNameDoesntExistException(RoomException e) {
+        return new Fieldmessage("name", e.getMessage());
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler({ReservationTimeException.class})
     public Fieldmessage handleReservationTimeException(ReservationTimeException e) {
-        return new Fieldmessage("StartTime/EndTime", "error on startTime and/or EndTime fields");
+        return new Fieldmessage("StartTime/EndTime", e.getMessage());
     }
 }

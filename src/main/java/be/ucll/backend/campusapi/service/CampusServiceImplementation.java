@@ -1,9 +1,6 @@
 package be.ucll.backend.campusapi.service;
 
-import be.ucll.backend.campusapi.error.CampusNameCannotBeChangedException;
-import be.ucll.backend.campusapi.error.CampusNameDoesntExistException;
-import be.ucll.backend.campusapi.error.CampusNameNeedsToBeUniqueException;
-import be.ucll.backend.campusapi.error.RequiredFieldNameException;
+import be.ucll.backend.campusapi.error.*;
 import be.ucll.backend.campusapi.model.Campus;
 import be.ucll.backend.campusapi.model.Room;
 import be.ucll.backend.campusapi.repository.CampusRepository;
@@ -32,20 +29,20 @@ public class CampusServiceImplementation implements CampusService {
     @Override
     public Campus getCampusById(String campusId) {
         return this.campusRepository.getById(campusId).orElseThrow(
-                CampusNameDoesntExistException::new
+                () -> new CampusException("campus name doesn't exist")
         );
     }
 
     @Override
     public Campus addCampuses(Campus campus) {
         if (allCampuses().stream().anyMatch(campus1 -> campus1.getCampusName().equals(campus.getCampusName()))) {
-            throw new CampusNameNeedsToBeUniqueException();
+            throw new CampusException("campus name needs to be unique");
         }
 
-        if (campus.getCampusName().equals("")
-        || campus.getAddress().equals("")
-        || campus.getNumberOfParkingSpaces() == 0) {
-            throw new RequiredFieldNameException();
+        if (campus.getCampusName().isEmpty()
+                || campus.getAddress().isEmpty()
+                || campus.getNumberOfParkingSpaces() <= 0) {
+            throw new RequiredFieldNameException("Provide all fields");
         }
         return this.campusRepository.addCampus(campus);
     }
@@ -55,7 +52,7 @@ public class CampusServiceImplementation implements CampusService {
         Campus campusToUpdate = getCampusById(campusId);
 
         if(!campusId.equals(campus.getCampusName())) {
-            throw new CampusNameCannotBeChangedException();
+            throw  new CampusException("campus name cannot be changed");
         }
 
         campusToUpdate.updateCampus(campus);

@@ -7,7 +7,6 @@ import be.ucll.backend.campusapi.model.User;
 import be.ucll.backend.campusapi.repository.ReservationRepository;
 import be.ucll.backend.campusapi.repository.RoomRepository;
 import be.ucll.backend.campusapi.repository.UserRepository;
-import org.hibernate.annotations.DialectOverride;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,24 +30,30 @@ public class ReservationServiceImplementation implements ReservationService {
     @Override
     public List<Reservation> getAllUserReservations(long userId) {
         User user = this.userRepository.getUserById(userId).orElseThrow(
-                UserDoesntExistException::new
+                () -> new UserException("User does not exist")
         );
         return this.reservationRepository.findByUser(user);
     }
 
     @Override
     public Reservation addReservation(long userId, Reservation reservation) {
+
+        if (reservation.getEndTime() == null
+                || reservation.getStartTime() == null) {
+            throw new RequiredFieldNameException("Start time and end time cannot be null");
+        }
+
         if (reservation.getEndTime().isBefore(reservation.getStartTime())) {
             throw new ReservationTimeException("Reservation end time can not be before the start time");
         }
 
         if (reservation.getStartTime().isBefore(LocalDateTime.now())) {
             System.out.println("tijd uitvoering: " + LocalDateTime.now());
-            throw new ReservationTimeException(("Can not make a reservation in the past"));
+            throw new ReservationTimeException("Can not make a reservation in the past");
         }
 
         User user = this.userRepository.getUserById(userId).orElseThrow(
-                UserDoesntExistException::new
+                () -> new UserException("User does not exist")
         );
 
         user.addReservation(reservation);
@@ -58,10 +63,10 @@ public class ReservationServiceImplementation implements ReservationService {
     @Override
     public Reservation getReservationByUser(long userId, long reservationId) {
         User user = this.userRepository.getUserById(userId).orElseThrow(
-                UserDoesntExistException::new
+                () -> new UserException("User does not exist")
         );
         return this.reservationRepository.getReservation(user, reservationId).orElseThrow(
-                ReservationDoesntExistException::new
+                () -> new ReservationException("Reservation does not exist")
         );
     }
 
@@ -69,25 +74,24 @@ public class ReservationServiceImplementation implements ReservationService {
     public Reservation addRoomToReservation(long userId, long reservationId, long roomId) {
         Reservation reservation = getReservationByUser(userId, reservationId);
         Room room = this.roomRepository.getRoomById(roomId).orElseThrow(
-                RoomDoesntExistException::new
+                () -> new RoomException("room doesn't exist")
         );
 
         if (reservation.getRooms()
                 .stream()
                 .anyMatch(room1 -> room1.getRoomId() == roomId)) {
-            throw new RoomIsAlreadyInReservationException("Room already exists in this reservation");
+            throw new RoomException("Room already exists in this reservation");
         }
 
         //Check if reservation has overlap
         List<Reservation> reservations = this.reservationRepository.getAllReservations();
         if (checkIfRoomHasReservationOverlap(reservations, reservation, room)) {
-            System.out.println("Room has a reservation overlap");
-            throw new RoomIsAlreadyInReservationException("Room has a reservation overlap");
+            throw new RoomException("Room has a reservation overlap");
         }
 
         //Check if reservation belongs to user
         if (reservation.getUser().getUserId() != userId) {
-            throw new ReservationDoesntMatchUserException("Reservation does not belong to this user");
+            throw new ReservationException("Reservation does not belong to this user");
         }
 
         reservation.addRoomToReservation(room);

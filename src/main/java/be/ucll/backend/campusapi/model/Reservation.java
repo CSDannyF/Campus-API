@@ -1,6 +1,6 @@
 package be.ucll.backend.campusapi.model;
 
-import be.ucll.backend.campusapi.error.RoomModelException;
+import be.ucll.backend.campusapi.error.RoomException;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
@@ -47,7 +47,7 @@ public class Reservation {
 
     public void addRoomToReservation(Room room) {
         if (room == null) {
-            throw new RoomModelException("Room cannot be null");
+            throw new RoomException("Room cannot be null");
         }
         this.rooms.add(room);
         room.setReservationToRoom(this);

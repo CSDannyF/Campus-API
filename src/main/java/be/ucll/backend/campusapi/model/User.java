@@ -1,6 +1,6 @@
 package be.ucll.backend.campusapi.model;
 
-import be.ucll.backend.campusapi.error.ReservationModelException;
+import be.ucll.backend.campusapi.error.ReservationException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
@@ -30,7 +30,7 @@ public class User {
 
     public void addReservation(Reservation reservation) {
         if (reservation == null) {
-            throw new ReservationModelException("Reservation cannot be null");
+            throw new ReservationException("Reservation cannot be null");
         }
         this.reservations.add(reservation);
         reservation.setUser(this);

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -73,37 +74,19 @@ public class CampusController {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({RequiredFieldNameException.class})
-    public Fieldmessage handleRequiredFieldException() {
-        return new Fieldmessage("", "provide all fields");
+    public Fieldmessage handleRequiredFieldException(RequiredFieldNameException e) {
+        return new Fieldmessage("", e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({CampusNameNeedsToBeUniqueException.class})
-    public Fieldmessage handleCampusNameNeedsToBeUniqueException() {
-        return new Fieldmessage("campusName", "campus name needs to be unique");
+    @ExceptionHandler({CampusException.class})
+    public Fieldmessage handleCampusNameException(CampusException e) {
+        return new Fieldmessage("campus", e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({CampusNameDoesntExistException.class})
-    public Fieldmessage handleCampusNameDoesntExistException() {
-        return new Fieldmessage("campus", "campus name doesn't exist");
-    }
-
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    @ExceptionHandler({CampusNameCannotBeChangedException.class})
-    public Fieldmessage handleCampusNameCannotBeChangedException() {
-        return new Fieldmessage("campusName", "campus name cannot be changed");
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({RoomNameNeedsToBeUniqueException.class})
-    public Fieldmessage handleRoomNameNeedsToBeUniqueException() {
-        return new Fieldmessage("name", "room name needs to be unique");
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({RoomDoesntExistException.class})
-    public Fieldmessage handeRoomNameDoesntExistException() {
-        return new Fieldmessage("name", "room name doesn't exist in this campus");
+    @ExceptionHandler({RoomException.class})
+    public Fieldmessage handleRoomNameException(RoomException e) {
+        return new Fieldmessage("name", e.getMessage());
     }
 }

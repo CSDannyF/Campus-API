@@ -20,6 +20,8 @@ public class RoomServiceImplementation implements RoomService {
         this.roomRepository = roomRepository;
     }
 
+    /// Add a room to a campus
+    /// Commented out room.firstName and room.lastName because I don't know why it's in the model, so no validation
     @Override
     public Room addRoom(Room room) {
         if (room.getName().isEmpty()
@@ -36,6 +38,7 @@ public class RoomServiceImplementation implements RoomService {
         return this.roomRepository.save(room);
     }
 
+    /// Get specific room in a given campus by roomName
     @Override
     public Room getRoom(String campusId, String roomName) {
         return this.roomRepository.getRoomByName(campusId, roomName).orElseThrow(
@@ -43,6 +46,7 @@ public class RoomServiceImplementation implements RoomService {
         );
     }
 
+    /// Search for rooms with a capacity greater than minNumberOfSeats which can be 0 when not used
     @Override
     public List<Room> searchRooms(Campus campus, int minNumberOfSeats) {
         return  campus.getRooms().stream().filter(

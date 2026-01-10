@@ -24,27 +24,31 @@ public class UserController {
         this.reservationService = reservationService;
     }
 
+    /// Get user by userId
     @GetMapping("/{user-id}")
     public User getUserById(@PathVariable(name = "user-id") long userId) {
         return this.userService.getUserById(userId);
     }
 
+    /// Get user by part of name
     @GetMapping()
     public List<User> getUser(@RequestParam String partOfName) {
         return this.userService.getUsersByPartOfName(partOfName);
     }
 
-
+    /// Add User
     @PostMapping
     public User addUser(@RequestBody User user) {
         return this.userService.addUser(user);
     }
 
+    /// Get all reservations made by an user
     @GetMapping("/{user-id}/reservations")
     public List<Reservation> getUserReservations(@PathVariable(name = "user-id") long userId) {
         return this.reservationService.getAllUserReservations(userId);
     }
 
+    /// Get a specific reservation made by a user via userId and reservationId
     @GetMapping("{user-id}/reservations/{reservation-id}")
     public Reservation getReservation(
             @PathVariable(name = "user-id") long userId,
@@ -52,6 +56,7 @@ public class UserController {
         return this.reservationService.getReservationByUser(userId, reservationId);
     }
 
+    /// Add a reservation via a userId
     @PostMapping("/{user-id}/reservations")
     public Reservation addReservation(
             @PathVariable(name = "user-id") long userId,
@@ -59,6 +64,7 @@ public class UserController {
         return this.reservationService.addReservation(userId, reservation);
     }
 
+    /// Add a room to a reservation if the given user is the owner of the reservation and the room is bookable
     @PutMapping("/{user-id}/reservations/{reservation-id}/rooms/{room-id}")
         public Reservation addRoomToReservation(
                 @PathVariable(name = "user-id") long userId,

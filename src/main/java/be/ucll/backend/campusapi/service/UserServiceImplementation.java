@@ -21,6 +21,7 @@ public class UserServiceImplementation implements UserService {
         this.userRepository = userRepository;
     }
 
+    /// Get user by Id
     @Override
     public User getUserById(long id) {
         return this.userRepository.getUserById(id).orElseThrow(
@@ -28,6 +29,7 @@ public class UserServiceImplementation implements UserService {
         );
     }
 
+    /// Add an user
     @Override
     public User addUser(User user) {
         if (user.getName().isEmpty()
@@ -37,6 +39,7 @@ public class UserServiceImplementation implements UserService {
         return this.userRepository.addUser(user);
     }
 
+    /// Get an user by a part of it's name, return type is a list because it can be that there are more users with that part of the name
     @Override
     public List<User> getUsersByPartOfName(String partOfName) {
         return this.userRepository.getAllUsers().stream()

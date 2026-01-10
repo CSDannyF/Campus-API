@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -25,21 +24,25 @@ public class CampusController {
         this.roomService = roomService;
     }
 
+
     @GetMapping
     public List<Campus> allCampuses() {
         return this.campusService.allCampuses();
     }
 
+    /// Get campus by id wich is a string
     @GetMapping("/{campusId}")
     public Campus getCampusById(@PathVariable String campusId) {
         return this.campusService.getCampusById(campusId);
     }
 
+    /// Post campus
     @PostMapping
     public Campus addCampus(@RequestBody Campus campus) {
         return this.campusService.addCampuses(campus);
     }
 
+    /// Update campus, campusId/CampusName cannot be updated
     @PutMapping("/{campusId}")
     public Campus updateCampus(@PathVariable String campusId, @RequestBody Campus campus) {
         return this.campusService.updateCampus(campusId, campus);
@@ -55,6 +58,8 @@ public class CampusController {
         this.campusService.deleteCampus(campusId);
     }
 
+    /// Get all rooms inside a campus with optional minimum seats filter
+    /// Was not able to integrate availableFrom and availableUntil
     @GetMapping("/{campusId}/rooms")
     public List<Room> getCampusRooms(
             @PathVariable String campusId,
@@ -62,11 +67,13 @@ public class CampusController {
         return this.campusService.getCampusRooms(campusId, minNumberOfSeats);
     }
 
+    /// Get room inside a campus by campusName and roomName
     @GetMapping("/{campusId}/rooms/{roomName}")
     public Room getRoomByName(@PathVariable String campusId, @PathVariable String roomName) {
         return this.roomService.getRoom(campusId, roomName);
     }
 
+    /// Add room ro campus via campusID
     @PostMapping("/{campusId}/rooms")
     public Room addRoomToCampus(@PathVariable String campusId, @RequestBody Room room) {
         return this.campusService.addRoomToCampus(campusId, room);

@@ -32,7 +32,6 @@ public class ReservationRepositoryImplementation implements ReservationRepositor
     @Override
     public Optional<Reservation> getReservation(User user, long reservationId) {
         return this.reservationJpaRepository.getReservationsByReservationIdAndUser(reservationId, user);
-        //return this.reservationJpaRepository.getReservationsByReservationIdAndUser_UserId(reservationId, userId);
     }
 
     @Override

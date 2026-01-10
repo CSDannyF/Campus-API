@@ -1,9 +1,8 @@
 package be.ucll.backend.campusapi.controller;
 
-import be.ucll.backend.campusapi.model.Campus;
 import be.ucll.backend.campusapi.service.CampusService;
 import be.ucll.backend.campusapi.service.RoomService;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,7 +10,6 @@ import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTest
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -31,6 +29,11 @@ public class CampusControllerTest {
 //        campusService = mock(CampusService.class);
 //        roomService = mock(RoomService.class);
 //    }
+
+    @AfterEach
+    public void delete() {
+        campusService.deleteAll();
+    }
 
     @Test
     public void addCampusSucces() {
@@ -70,7 +73,7 @@ public class CampusControllerTest {
     }
 
     @Test
-    public void addCampussesWithTheSameName() {
+    public void addCampusesWithTheSameName() {
         client.post()
                 .uri("/campus")
                 .header("Content-Type", "application/json")
@@ -89,5 +92,42 @@ public class CampusControllerTest {
                 .expectStatus().isBadRequest()
                 .expectBody()
                 .json("{\"field\": \"campus\", \"message\": \"campus name needs to be unique\"}");
+    }
+
+    @Test
+    public void getCampusRoomWithCapacityOverTwenty() {
+        client.post()
+                .uri("/campus")
+                .header("Content-Type", "application/json")
+                .bodyValue("{\"campusName\":\"Heraeus\", \"address\":\"Heverlee\",\"numberOfParkingSpaces\":250}")
+                .exchange()
+                .expectStatus().is2xxSuccessful()
+                .expectBody()
+                .json("{\"campusName\":\"Heraeus\", \"address\":\"Heverlee\",\"numberOfParkingSpaces\":250}");
+
+        client.post()
+                .uri("/campus/Heraeus/rooms")
+                .header("Content-Type", "application/json")
+                .bodyValue("{\"name\":\"IT-Kamer\", \"type\":\"Computer lokaal\", \"capacity\": 15,\"floor\":\"1\", \"firstName\":\"IT\", \"lastName\":\"lokaal\"}")
+                .exchange()
+                .expectStatus().is2xxSuccessful()
+                .expectBody()
+                .json("{\"name\":\"IT-Kamer\", \"type\":\"Computer lokaal\", \"capacity\": 15,\"floor\":\"1\", \"firstName\":\"IT\", \"lastName\": \"lokaal\"}");
+
+        client.post()
+                .uri("/campus/Heraeus/rooms")
+                .header("Content-Type", "application/json")
+                .bodyValue("{\"name\":\"Ridderzaal\", \"type\":\"Vergaderzaal\", \"capacity\": 35,\"floor\":\"1\", \"firstName\":\"Ridder\", \"lastName\":\"zaal\"}")
+                .exchange()
+                .expectStatus().is2xxSuccessful()
+                .expectBody()
+                .json("{\"name\":\"Ridderzaal\", \"type\":\"Vergaderzaal\", \"capacity\": 35,\"floor\":\"1\", \"firstName\":\"Ridder\", \"lastName\": \"zaal\"}");
+
+        client.get()
+                .uri("campus/Heraeus/rooms?minNumberOfSeats=20")
+                .exchange()
+                .expectStatus().is2xxSuccessful()
+                .expectBody()
+                .json("[{\"name\":\"Ridderzaal\", \"type\":\"Vergaderzaal\", \"capacity\": 35,\"floor\":\"1\", \"firstName\":\"Ridder\", \"lastName\": \"zaal\"}]");
     }
 }

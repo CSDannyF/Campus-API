@@ -20,6 +20,11 @@ public class ReservationRepositoryImplementation implements ReservationRepositor
     }
 
     @Override
+    public List<Reservation> getAllReservations() {
+        return this.reservationJpaRepository.findAll();
+    }
+
+    @Override
     public Reservation addReservation(Reservation reservation) {
         return this.reservationJpaRepository.save(reservation);
     }

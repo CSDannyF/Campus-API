@@ -37,6 +37,7 @@ public class Room {
     private Campus campus;
 
     @ManyToMany(mappedBy = "rooms")
+    @JsonIgnore
     private List<Reservation> reservations;
 
     public Campus getCampus() {
@@ -103,6 +104,10 @@ public class Room {
         this.roomId = id;
     }
 
+    public List<Reservation> getReservations() {
+        return this.reservations;
+    }
+    //TODO zorgen dat deze setter niet in mijn POST json te zien is
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public void setReservationToRoom(Reservation reservation) {
         this.reservations.add(reservation);

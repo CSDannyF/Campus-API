@@ -10,6 +10,8 @@ import java.util.Optional;
 @Repository
 public interface ReservationRepository {
 
+    List<Reservation> getAllReservations();
+
     Reservation addReservation(Reservation reservation);
 
     Optional<Reservation> getReservation(User user, long reservationId);

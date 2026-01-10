@@ -6,7 +6,9 @@ import be.ucll.backend.campusapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImplementation implements UserService {
@@ -30,5 +32,12 @@ public class UserServiceImplementation implements UserService {
     @Override
     public User addUser(User user) {
         return this.userRepository.addUser(user);
+    }
+
+    @Override
+    public List<User> getUsersByPartOfName(String partOfName) {
+        return this.userRepository.getAllUsers().stream()
+                .filter(user -> user.getName().contains(partOfName))
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 }

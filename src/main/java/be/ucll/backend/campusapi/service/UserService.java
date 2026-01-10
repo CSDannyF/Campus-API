@@ -10,4 +10,5 @@ import java.util.List;
 public interface UserService {
     User getUserById(long id);
     User addUser(User user);
+    List<User> getUsersByPartOfName(String partOfName);
 }

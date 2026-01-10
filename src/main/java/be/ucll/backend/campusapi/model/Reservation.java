@@ -1,6 +1,7 @@
 package be.ucll.backend.campusapi.model;
 
 import be.ucll.backend.campusapi.error.RoomModelException;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
@@ -14,10 +15,13 @@ public class Reservation {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private long reservationId;
 
+    //TODO Check if @JsonFormat works
     @Column(name = "START_TIME")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime startTime;
 
     @Column(name = "END_TIME")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime endTime;
 
     @Column
